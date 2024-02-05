@@ -13,3 +13,50 @@ last_name, gender, hire_date.
 Відсотртуйте за кількістю працівників.
 8. Показати мінімальну та максимальну зарплати по працівникам
 */
+USE employees;
+# SHOW TABLE STATUS;
+# 1
+# SHOW COLUMNS FROM employees;
+SELECT *
+FROM (SELECT * FROM employees WHERE gender = "F") AS f
+WHERE hire_date = "1990-01-01" OR hire_date > "2000-01-01";
+# 2
+SELECT * 
+FROM employees
+WHERE first_name = last_name;
+# 3
+SELECT first_name,
+last_name, gender, hire_date
+FROM employees
+WHERE emp_no IN(10001, 10002, 10003, 10004);
+# 4
+# SHOW COLUMNS FROM departments;
+SELECT *
+FROM departments
+WHERE dept_name LIKE '%a%' OR dept_name LIKE '_a%';
+# 5
+SELECT first_name, last_name, birth_date, hire_date,
+TIMESTAMPDIFF(year, birth_date, hire_date) AS '45 y.o.',
+MONTHNAME(birth_date) AS 'Month',
+DAYNAME(hire_date) AS 'Day'
+FROM employees
+WHERE 
+TIMESTAMPDIFF(year, birth_date,hire_date) = 45 AND 
+MONTHNAME(birth_date) = 'October' AND 
+DAYNAME(hire_date) = 'Sunday';
+# 6
+# SHOW COLUMNS FROM salaries;
+SELECT MAX(salary)
+FROM salaries
+WHERE from_date > "1995-06-01";
+# 7
+SELECT DISTINCT emp_no, MAX(salary), MIN(salary)
+FROM salaries
+GROUP BY emp_no;
+# 8
+SELECT dept_no, COUNT(DISTINCT emp_no) AS counts_emp 
+FROM dept_emp 
+WHERE to_date > curdate() 
+GROUP BY dept_no 
+HAVING COUNT(emp_no) > '13000' 
+ORDER BY COUNT(emp_no) ASC;
